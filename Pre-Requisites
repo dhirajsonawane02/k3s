@@ -1,0 +1,30 @@
+
+NOTE: In production environment, to make a Kubernetes Cluster Highly Available, its recommended that we should always have an odd (like 3 or 5 or 7) number of Master Nodes. But here we are not using this cluster to run any production grade application, we have decided to proceed with 2 Master Nodes and 4 worker nodes.
+
+Pre-Requisites:
+A.	6 Raspberry Pi 4 boards with 8 GB Memory
+B.	SD Card – 32 GB
+C.	8 Port Ethernet Switch
+D.	Power Supply
+E.	Ethernet Cables – 7 (1 for each board and 1 for up linking)
+F.	HDMI to micro-USB Cables
+G.	Keyboard
+H.	Display
+HDMI – microUSB, Keyboard, Display you can use as per your convenience and availability.
+
+Making SD Card Ready and Booting up Boards:
+A.	Download Raspbian Lite using this link. (https://www.raspberrypi.org/software/operating-systems/)
+ 
+B.	Download Balena Etcher to flash SD Card using this link. (https://www.balena.io/etcher/)
+ 
+C.	Once SD card is ready, then mount it to your Laptop and create a blank file named “ssh” in “/boot” partition.
+
+D.	Once all 6 cards are ready, then insert them in all Raspberry Pi 4 boards.
+
+E.	Connect Ethernet Cables, HDMI-mircoHDMI cables (for display), Keyboards and Displays.
+
+F.	And then at last, Power On your all boards. Let the boards power on completely, usually it takes 25ms. However, depends on many other components like storage, Application etc.
+
+G.	Once all boards are up and running, login using default credentials:
+Username: pi
+Password: raspberry
