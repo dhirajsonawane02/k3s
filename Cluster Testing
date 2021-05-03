@@ -1,0 +1,38 @@
+Testing k3s cluster:
+1.	Let’s run a nginx deployment to test our k3s cluster. For that we have created a Deployment manifest file (YAML file) with 3 replicas as shown below. Once file is ready, execute 
+ “kubectl create -f <manifest-file-name>” 
+ 
+2.	To get all objects created by deployment, run “kubectl get all” command.
+ 
+
+3.	Let’s scale our deployment to have 7 replicas, for that run “kubectl scale deployment <deployment-name> --replicas=7”
+ 
+
+
+Performance Testing:
+1.	We have deployed metrics server at the time of cluster creation. But if it’s not, then one can install by running “kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/download/v0.3.6/components.yaml”
+ 
+2.	To verify metrics-server deployment, run: “kubectl get deployment metrics-server -n kube-system”
+ 
+3.	Now we will run a simple PHP web application by running following command.
+kubectl apply -f https://k8s.io/examples/application/php-apache.yaml
+ 
+4.	To verify application status, run “kubectl get pods”
+ 
+5.	Now setup Horizontal Pod Autoscaling (HPA) for our PHP application to automatically scale number of pods based on CPU load. We will set CPU Load percentage to 60, minimum number of application pods always running=1 and maximum replicas in case of load=4. To do so, run following command:
+kubectl autoscale deployment php-apache --cpu-percent=60 --min=1 --max=4
+ 
+6.	To check status of HPA, we can run “kubectl get hpa” command. It shows details like current CPU utilization, minimum and maximum pods defined, etc.
+ 
+7.	To get the detailed information of HPA, we can run “kubectl describe hpa” command.
+ 
+8.	To test HPA, now we will put load on our PHP application. We will use “Busybox” image to send infinite requests to PHP application. So, lets create busybox deployment now. In this deployment we used wget in while loop to send recurring calls (requests) to PHP application.
+ 
+9.	To verify Deployment status, run “kubectl get all”. In output you will find the replicaSet created by this deployment is running with only 1 pod and current CPU load is 0%.
+
+10.	Then wait for few minutes and again verify HPA status to check current CPU load. Run: “Kubectl get hpa -w”
+ 
+Here we will find current CPU load is beyond 60%, so HPA scaled php-apache application deployment horizontally to 4 Pods in order to manage load coming from infinite-calls deployment.
+Then after monitoring HPA for several minutes, we can see CPU load reduced from 250% to 55% over the 13-14 minutes span.
+ 
+Thus, we can say that we have successfully proved our highly available k3s cluster is capable of handling sudden spike in load due to high demand. HPA made sure that deployments in our k3s cluster are running without any crashes or major issues.  
